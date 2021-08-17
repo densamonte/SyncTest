@@ -1,0 +1,71 @@
+<aura:component>
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="column" type="Object"/>
+    
+    <aura:attribute name="defValueWhenBlankForNumber" type="Object"/>
+    <aura:attribute name="fieldValue" type="Object"/>
+    <aura:attribute name="fieldLinkLabel" type="String"/>
+    
+    <aura:attribute name="isText" 		type="boolean" default="false"/>
+    <aura:attribute name="isDate" 		type="boolean" default="false"/>
+    <aura:attribute name="isDateTime" 	type="boolean" default="false"/>
+    <aura:attribute name="isTime" 		type="boolean" default="false"/>
+    <aura:attribute name="isEmail" 		type="boolean" default="false"/>
+    <aura:attribute name="isPhone" 		type="boolean" default="false"/>
+    <aura:attribute name="isURL" 		type="boolean" default="false"/>
+    <aura:attribute name="isPercent" 	type="boolean" default="false"/>
+    <aura:attribute name="isCurrency" 	type="boolean" default="false"/>
+    <aura:attribute name="isNumber" 	type="boolean" default="false"/>
+    <aura:attribute name="isBoolean" 	type="boolean" default="false"/>
+    <aura:attribute name="isAddress" 	type="boolean" default="false"/>
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <aura:if isTrue="{!v.isText}">
+        <!-- Tested: use outputText looks work better than formattedText -->
+        <ui:outputText value="{!v.fieldValue}" />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isBoolean}">
+        <ui:outputCheckbox value="{!v.fieldValue}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.isDate || v.isDateTime}">
+        <lightning:formattedDateTime value="{!v.fieldValue}" />
+    </aura:if>
+    <aura:if isTrue="{!v.isTime}">
+        <lightning:formattedTime value="{!v.fieldValue}" />
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isEmail}">
+        <lightning:formattedEmail value="{!v.fieldValue}" />
+    </aura:if>
+    <aura:if isTrue="{!v.isPhone}">
+        <lightning:formattedPhone value="{!v.fieldValue}" />
+    </aura:if>
+    <aura:if isTrue="{!v.isURL}">
+        <lightning:formattedUrl value="{!v.fieldValue}" label="{!v.fieldLinkLabel}"/>
+    </aura:if>
+    
+    <aura:if isTrue="{!v.isPercent}">
+        <lightning:formattedNumber value="{!v.fieldValue/100}" style="percent" />
+    </aura:if>
+    <aura:if isTrue="{!v.isCurrency}">
+        <!-- use outputCurrency: it auto shows the currency symbol... -->
+        <ui:outputCurrency value="{!v.fieldValue}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.isNumber}">
+        <lightning:formattedNumber value="{!v.fieldValue}"
+                                   maximumFractionDigits="{!v.column.typeAttributes.maximumFractionDigits}"/>
+    </aura:if>
+    <aura:if isTrue="{!v.isAddress}">
+        <lightning:formattedAddress street="{!v.fieldValue.street}"
+            city="{!v.fieldValue.city}"
+            country="{!v.fieldValue.country}"
+            province="{!v.fieldValue.province}"
+            postalCode="{!v.fieldValue.postalCode}"
+            disabled="true"                        
+        />
+    </aura:if>	
+	    
+    
+</aura:component>
