@@ -1,0 +1,8 @@
+.THIS .trBord_cclass {
+    border-top: 2px solid rgb(217, 219, 221) !important;
+}
+
+.THIS .td_value_cclass {
+    line-height: 1.25;
+    font-weight: bold;
+}

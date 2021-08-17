@@ -1,0 +1,55 @@
+<aura:component >
+    
+    <aura:attribute name="record" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    
+    <aura:registerEvent name="tableRowAction" type="c:dpTableRowAction" />
+    
+    <div style="border-top: 2px solid rgb(217, 219, 221);">
+        <lightning:layout class="slds-p-around_small" multipleRows="true">
+            <aura:iteration items="{!v.columns}" var="column">
+                <aura:if isTrue="{! and(and(column.type!='button', column.type!='action'), column.type!='button-icon')}">
+                    <lightning:layoutItem class="slds-text-title_caps" size="6">
+                        {!column.label}:
+                    </lightning:layoutItem>
+                    <lightning:layoutItem  size="6" class="slds-text-align_left">
+                        <div class="td_value_cclass">
+                            <c:dpTableCellStacked record="{!v.record}" column="{!column}" />
+                        </div>
+                    </lightning:layoutItem>
+                </aura:if>
+                
+                <aura:if isTrue="{! or(or(column.type=='button', column.type=='action'), column.type=='button-icon')}">
+                    <lightning:layoutItem class="slds-text-title_caps" size="6">
+                        &nbsp;
+                    </lightning:layoutItem>
+                    <lightning:layoutItem  size="6" class="slds-text-align_left">
+                        <div class="td_value_cclass slds-p-bottom_small">
+                            <aura:if isTrue="{!column.type=='button'}">
+                                <lightning:button label="{!column.typeAttributes.label}"
+                                                  name="{!column.typeAttributes.name}"
+                                                  onclick="{!c.onTableRowAction}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!column.type=='button-icon'}">
+                                <lightning:buttonIcon variant="bare" size="small"
+                                                      name="{!column.typeAttributes.name}"
+                                                      iconName="{!column.typeAttributes.iconName}"
+                                                      onclick="{!c.onTableRowAction}"/>
+                            </aura:if>
+                            <aura:if isTrue="{!column.type=='action'}">
+                                <lightning:buttonMenu alternativeText="Toggle menu" onselect="{!c.handleMenuSelect}">
+                                    <aura:iteration items="{!column.typeAttributes.rowActions}" var="rowAction">
+                                        <lightning:menuItem label="{!rowAction.label}" 
+                                                            value="{!rowAction.name}"/>
+                                    </aura:iteration>
+                                </lightning:buttonMenu>
+                            </aura:if>
+                        </div>
+                    </lightning:layoutItem>
+                </aura:if>
+                
+            </aura:iteration>
+        </lightning:layout>
+    </div>
+	
+</aura:component>
