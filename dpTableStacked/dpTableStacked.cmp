@@ -1,0 +1,37 @@
+<aura:component >
+    
+    <aura:attribute name="records" type="Object"/>
+    <aura:attribute name="columns" type="List"/>
+    <aura:attribute name="title"   type="String"/>
+    
+    <!-- enable support custom component for mobile -->
+    <aura:attribute name="mobileCompName" type="String"/>
+    <aura:attribute name="mobileComp" type="Aura.Component" />
+    
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    <aura:handler name="change"	value="{!v.records}"	action="{!c.onChangeRecords}" />
+    
+    <c:dpUIMessage aura:id="uiMessage" />
+    
+    <aura:if isTrue="{! !empty(v.records) }">
+        
+        <aura:if isTrue="{! empty(v.mobileCompName) }">
+            <!-- Default dpTableRecordStacked Comp-->
+            <aura:iteration items="{!v.records}" var="record" indexVar="recIndex">
+                <c:dpTableRecordStacked record="{!record}" columns="{!v.columns}" />
+            </aura:iteration>
+            
+            <!-- Custom Comp with the name like 'mobileCompName' attribute value -->
+            <aura:set attribute="else">
+                {!v.mobileComp}
+            </aura:set>
+        </aura:if>
+        
+        <aura:set attribute="else">
+            <div class="slds-align_absolute-center">
+                No records to display.
+            </div>
+        </aura:set>
+        
+    </aura:if>	
+</aura:component>
